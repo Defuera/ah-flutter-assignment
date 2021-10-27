@@ -1,5 +1,9 @@
 # Funda flutter assignment
 
+![funda_no_network](https://user-images.githubusercontent.com/1181883/139067997-0eb36a7f-79d7-462c-ab39-cb73967dcebc.gif)
+![funda_404_case](https://user-images.githubusercontent.com/1181883/139068202-06a25410-69c9-4f2d-bf2f-7c0acd945389.gif)
+
+
 ## About
 
 Application is implemented with BLoC architecture, where Cubit is chosen as a base class for blocs.
