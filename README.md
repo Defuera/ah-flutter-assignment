@@ -1,6 +1,4 @@
-# funda
-
-Funda flutter assignment
+# Funda flutter assignment
 
 ## About
 
@@ -25,3 +23,11 @@ Application is implemented with BLoC architecture, where Cubit is chosen as a ba
 I don't think solving above tasks would show skill too much, so I omitted it to save time.
 I invested in what is more important imo - architecture, scalability and code clarity.
 UI is also ok-ish I think 😊
+
+## Running
+
+### Tests
+ `flutter test --coverage`
+
+### App
+`flutter run`
