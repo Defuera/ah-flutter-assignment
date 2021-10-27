@@ -10,10 +10,10 @@ Application is implemented with BLoC architecture, where Cubit is chosen as a ba
 
 
 #### Notice:
-- I use either/option here along with my own extensions, cause I think it's a nice approach and I want to share it with you :)
-- Unit test ✓
-- Local data source is not practivally used, but it's to show off repo pattern. It's also tested, so can be quickly brought to live.
-- I didn't use @freezed in this project, but u can see I am somewhat accustomed to it. Do
+- Usage of either/option along with my own extensions, I find it quite a clear and concise approach for  error propagation:)
+- Unit tests ✓
+- Local data source not practically used, rather implement to present power of repository pattern.
+- I didn't use @freezed in this project, but u can see I am somewhat accustomed to it.
 
 #### Known flows:
 - Using one model between Network and Domain layers 😱
