@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funda/common/model/error.dart';
 import 'package:funda/common/model/property.dart';
-import 'package:funda/common/property_repository.dart';
+import 'package:funda/property_details/model/property_repository.dart';
 import 'package:get_it/get_it.dart';
 
 class PropertyDetailsState {
@@ -34,18 +34,24 @@ class PropertyDetailsState {
       throw Exception('Illegal state: data and error cannot be null at the same time when isLoading == false');
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! PropertyDetailsState) {
+      return false;
+    }
+    return isLoading && other.isLoading || error == other.error || data == other.data;
+  }
 }
 
 class PropertyDetailsBloc extends Cubit<PropertyDetailsState> {
-  PropertyDetailsBloc(this.propertyId) : super(PropertyDetailsState.loading()) {
-    loadData();
-  }
+  PropertyDetailsBloc(this.propertyId) : super(PropertyDetailsState.loading());
 
   final String propertyId;
 
   final _propertyRepository = GetIt.instance.get<PropertyRepository>();
 
-  Future<void> loadData() async {
+  Future<void> init() async {
     final result = await _propertyRepository.getProperty(propertyId);
     result.fold(
       (error) => emit(PropertyDetailsState.error(error)),
@@ -53,5 +59,5 @@ class PropertyDetailsBloc extends Cubit<PropertyDetailsState> {
     );
   }
 
-  Future<void> retry() => loadData();
+  Future<void> retry() => init();
 }

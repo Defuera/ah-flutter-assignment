@@ -27,4 +27,8 @@ extension EitherExtention<L, R> on Either<L, R> {
           return Right<L, T>(mappedResult);
         },
       );
+
+  R? get valueOrNull => fold((error) => null, (result) => result);
+
+  L? get errorOrNull => fold((error) => error, (result) => null);
 }

@@ -2,8 +2,8 @@ import 'package:either_option/either_option.dart';
 import 'package:funda/common/funda_api.dart';
 import 'package:funda/common/model/error.dart';
 import 'package:funda/common/model/property.dart';
-import 'package:funda/common/property_local_data_source.dart';
 import 'package:funda/common/utils/either_option_extensions.dart';
+import 'package:funda/property_details/model/property_local_data_source.dart';
 
 class PropertyRepository {
   PropertyRepository(this.remote, this.local);

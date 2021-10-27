@@ -14,7 +14,7 @@ class PropertyDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: BlocProvider<PropertyDetailsBloc>(
-          create: (context) => PropertyDetailsBloc(propertyId),
+          create: (context) => PropertyDetailsBloc(propertyId)..init(),
           child: BlocBuilder<PropertyDetailsBloc, PropertyDetailsState>(
             builder: (context, state) => state.when(
               loading: () => const Center(child: CircularProgressIndicator()),
