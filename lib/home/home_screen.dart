@@ -6,10 +6,6 @@ import 'package:funda/common/utils/price_formatter.dart';
 import 'package:funda/common/utils/text_style_extentions.dart';
 import 'package:funda/home/home_bloc.dart';
 
-//todo add image placeholder
-//todo add button linking to google maps
-//todo localization
-//todo add local cache
 class HomeScreen extends StatelessWidget {
   const HomeScreen({required this.propertyId, Key? key}) : super(key: key);
 
@@ -93,10 +89,6 @@ class _ErrorWidget extends StatelessWidget {
 
   final RemoteError error;
 
-  // android → const IconData
-  // android — material icon name
-  // bug_report → const IconData
-  // bug_report — material icon named "bug report".
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16.0),

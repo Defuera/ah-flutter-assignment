@@ -1,26 +1,11 @@
-//
-//
-// import 'package:funda/common/model/property.dart';
-//
-// abstract class PropertyDataSource {
-//   Future<Property> getProperty();
-//
-//   Future<void> setProperty(Property property);
-// }
-//
-// class PropertyLocalDataSource extends PropertyDataSource {
-//
-//   final cacheMap = <String, Property>{};
-//
-//   @override
-//   Future<Property> getProperty() {
-//     // TODO: implement getProperty
-//     throw UnimplementedError();
-//   }
-//
-//   @override
-//   Future<void> setProperty(Property property) {
-//     cacheMap[property.id]
-//   }
-//
-// }
+import 'package:funda/common/model/property.dart';
+
+class PropertyLocalDataSource {
+  final cacheMap = <String, Property>{};
+
+  Future<Property?> getProperty(String propertyId) async => cacheMap[propertyId];
+
+  Future<void> setProperty(String id, Property property) async {
+    cacheMap[id] = property;
+  }
+}
