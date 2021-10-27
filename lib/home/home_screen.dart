@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:funda/common/model/error.dart';
 import 'package:funda/common/model/property.dart';
 import 'package:funda/common/utils/price_formatter.dart';
 import 'package:funda/common/utils/text_style_extentions.dart';
@@ -8,10 +9,12 @@ import 'package:funda/home/home_bloc.dart';
 
 //todo unknown error
 //todo network error with retry button
-//todo improve ui according to funda website
 //todo add image placeholder
 //todo add button linking to google maps
 //todo localization
+//todo add local cache
+//todo move id as a paramether of home screen
+//todo handle situation, when property is no longer available
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -30,15 +33,6 @@ class HomeScreen extends StatelessWidget {
       );
 }
 
-//photo
-//address
-// postcode and place
-
-// price
-
-//Omschrijving
-
-// WoonOppervlakte  PerceelOppervlakte
 class _DetailedPropertyWidget extends StatelessWidget {
   const _DetailedPropertyWidget(this.property);
 
@@ -47,8 +41,7 @@ class _DetailedPropertyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListView(
         children: [
-          Image.network(property.mainPhotoUrl ?? ''), //todo placeholder
-
+          Image.network(property.mainPhotoUrl ?? ''),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -99,14 +92,41 @@ class _DetailedPropertyWidget extends StatelessWidget {
 }
 
 class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget(this.errorText, {Key? key}) : super(key: key);
+  const _ErrorWidget(this.error, {Key? key}) : super(key: key);
 
-  final String errorText;
+  final RemoteError error;
 
+  // android → const IconData
+  // android — material icon name
+  // bug_report → const IconData
+  // bug_report — material icon named "bug report".
   @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: error.when(
+            network: () => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.signal_wifi_connected_no_internet_4_rounded,
+                  color: Colors.orangeAccent,
+                  size: 84,
+                ),
+                ElevatedButton(
+                  child: Text(
+                    'Retry',
+                    style: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                  ),
+                  onPressed: () => context.read<HomeBloc>().retry(),
+                )
+              ],
+            ),
+            unexpected: (message) => Text(message ?? 'Something went terribly wrong'),
+            server: (message, code) => Text('Server error $code:\n$message'),
+          ),
+        ),
+      );
 }
 
 class _IconedText extends StatelessWidget {
