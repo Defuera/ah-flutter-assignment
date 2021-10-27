@@ -27,10 +27,12 @@ Future<Either<RemoteError, T>> executeSafely<R, T>(
       return Right(converter(result));
     }
   } on DioError catch (error) {
-    if (error.type == DioErrorType.other) {
-      return Left(RemoteError.network()); //todo network?
+    if (error.type == DioErrorType.response) {
+      final code = error.response?.statusCode;
+      final message = error.response?.statusMessage;
+      return Left(RemoteError.server(code ?? -100, message ?? ''));
     } else {
-      return Left(RemoteError.server(1, 'message')); //todo network?
+      return Left(RemoteError.network());
     }
   } catch (error, st) {
     return Left(RemoteError.unexpected(error.toString()));

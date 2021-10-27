@@ -6,6 +6,9 @@ import 'package:funda/common/di.dart';
 import 'package:funda/home/home_screen.dart';
 import 'package:logging/logging.dart';
 
+const expiredId = '6289a7bb-a1a8-40d5-bed1-bff3a5f62ee6';
+const validId = '092cc8ac-5e12-4654-8fed-1bcfe802771d';
+
 void main() {
   runZonedGuarded<Future<void>>(
     () async {
@@ -23,12 +26,9 @@ void main() {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        home: const HomeScreen(),
+        theme: ThemeData(primarySwatch: Colors.orange),
+        home: const HomeScreen(propertyId: validId),
       );
 }

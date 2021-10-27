@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:funda/common/model/error.dart';
@@ -7,21 +6,19 @@ import 'package:funda/common/utils/price_formatter.dart';
 import 'package:funda/common/utils/text_style_extentions.dart';
 import 'package:funda/home/home_bloc.dart';
 
-//todo unknown error
-//todo network error with retry button
 //todo add image placeholder
 //todo add button linking to google maps
 //todo localization
 //todo add local cache
-//todo move id as a paramether of home screen
-//todo handle situation, when property is no longer available
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({required this.propertyId, Key? key}) : super(key: key);
+
+  final String propertyId;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         body: BlocProvider<HomeBloc>(
-          create: (context) => HomeBloc(),
+          create: (context) => HomeBloc(propertyId),
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) => state.when(
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -105,27 +102,80 @@ class _ErrorWidget extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: error.when(
-            network: () => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.signal_wifi_connected_no_internet_4_rounded,
-                  color: Colors.orangeAccent,
-                  size: 84,
-                ),
-                ElevatedButton(
-                  child: Text(
-                    'Retry',
-                    style: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                  ),
-                  onPressed: () => context.read<HomeBloc>().retry(),
-                )
-              ],
-            ),
+            network: () => const _NetworkError(),
             unexpected: (message) => Text(message ?? 'Something went terribly wrong'),
-            server: (message, code) => Text('Server error $code:\n$message'),
+            server: (message, code) => _ServerError(message: message, code: code),
           ),
         ),
+      );
+}
+
+class _ServerError extends StatelessWidget {
+  _ServerError({required this.message, required this.code, Key? key}) : super(key: key);
+
+  final String message;
+  final int code;
+
+  final _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) => code == 404
+      ? Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Property cannot be found, try another one?',
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: 'Paste property id',
+                suffixIcon: IconButton(
+                  color: Colors.orange,
+                  icon: const Icon(Icons.send),
+                  onPressed: () => loadNewProperty(context),
+                ),
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange, width: 1.0),
+                ),
+              ),
+              onSubmitted: (_) => loadNewProperty(context),
+            )
+          ],
+        )
+      : Text('Server error $code:\n$message');
+
+  void loadNewProperty(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).push<void>(MaterialPageRoute<dynamic>(
+      builder: (context) => HomeScreen(propertyId: _controller.text),
+    ));
+  }
+}
+
+class _NetworkError extends StatelessWidget {
+  const _NetworkError({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.signal_wifi_connected_no_internet_4_rounded,
+            color: Colors.orangeAccent,
+            size: 84,
+          ),
+          ElevatedButton(
+            child: Text(
+              'Retry',
+              style: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+            ),
+            onPressed: () => context.read<HomeBloc>().retry(),
+          )
+        ],
       );
 }
 

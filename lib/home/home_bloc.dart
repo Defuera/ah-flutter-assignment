@@ -37,19 +37,21 @@ class HomeState {
 }
 
 class HomeBloc extends Cubit<HomeState> {
-  HomeBloc() : super(HomeState.loading()) {
-    init();
+  HomeBloc(this.propertyId) : super(HomeState.loading()) {
+    loadData();
   }
+
+  final String propertyId;
 
   final _propertyRepository = GetIt.instance.get<PropertyRepository>();
 
-  Future<void> init() async {
-    final result = await _propertyRepository.getProperty('092cc8ac-5e12-4654-8fed-1bcfe802771d'); //test property id
+  Future<void> loadData() async {
+    final result = await _propertyRepository.getProperty(propertyId);
     result.fold(
       (error) => emit(HomeState.error(error)),
       (property) => emit(HomeState.data(property)),
     );
   }
 
-  Future<void> retry() => init();
+  Future<void> retry() => loadData();
 }
