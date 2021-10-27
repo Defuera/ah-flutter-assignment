@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:funda/common/di.dart';
-import 'package:funda/home/home_screen.dart';
+import 'package:funda/property_details/property_details_screen.dart';
 import 'package:logging/logging.dart';
 
 const expiredId = '6289a7bb-a1a8-40d5-bed1-bff3a5f62ee6';
@@ -29,6 +29,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(primarySwatch: Colors.orange),
-        home: const HomeScreen(propertyId: validId),
+        home: const PropertyDetailsScreen(propertyId: validId),
       );
 }

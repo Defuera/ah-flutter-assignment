@@ -4,18 +4,18 @@ import 'package:funda/common/model/error.dart';
 import 'package:funda/common/model/property.dart';
 import 'package:funda/common/utils/price_formatter.dart';
 import 'package:funda/common/utils/text_style_extentions.dart';
-import 'package:funda/home/home_bloc.dart';
+import 'package:funda/property_details/property_details_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({required this.propertyId, Key? key}) : super(key: key);
+class PropertyDetailsScreen extends StatelessWidget {
+  const PropertyDetailsScreen({required this.propertyId, Key? key}) : super(key: key);
 
   final String propertyId;
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: BlocProvider<HomeBloc>(
-          create: (context) => HomeBloc(propertyId),
-          child: BlocBuilder<HomeBloc, HomeState>(
+        body: BlocProvider<PropertyDetailsBloc>(
+          create: (context) => PropertyDetailsBloc(propertyId),
+          child: BlocBuilder<PropertyDetailsBloc, PropertyDetailsState>(
             builder: (context, state) => state.when(
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (errorText) => _ErrorWidget(errorText),
@@ -143,7 +143,7 @@ class _ServerError extends StatelessWidget {
   void loadNewProperty(BuildContext context) {
     Navigator.of(context).pop();
     Navigator.of(context).push<void>(MaterialPageRoute<dynamic>(
-      builder: (context) => HomeScreen(propertyId: _controller.text),
+      builder: (context) => PropertyDetailsScreen(propertyId: _controller.text),
     ));
   }
 }
@@ -165,7 +165,7 @@ class _NetworkError extends StatelessWidget {
               'Retry',
               style: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
             ),
-            onPressed: () => context.read<HomeBloc>().retry(),
+            onPressed: () => context.read<PropertyDetailsBloc>().retry(),
           )
         ],
       );

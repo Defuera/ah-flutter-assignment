@@ -4,14 +4,14 @@ import 'package:funda/common/model/property.dart';
 import 'package:funda/common/property_repository.dart';
 import 'package:get_it/get_it.dart';
 
-class HomeState {
-  factory HomeState.loading() => HomeState._(isLoading: true);
+class PropertyDetailsState {
+  factory PropertyDetailsState.loading() => PropertyDetailsState._(isLoading: true);
 
-  factory HomeState.error(RemoteError error) => HomeState._(error: error);
+  factory PropertyDetailsState.error(RemoteError error) => PropertyDetailsState._(error: error);
 
-  factory HomeState.data(Property data) => HomeState._(data: data);
+  factory PropertyDetailsState.data(Property data) => PropertyDetailsState._(data: data);
 
-  HomeState._({this.isLoading = false, this.error, this.data});
+  PropertyDetailsState._({this.isLoading = false, this.error, this.data});
 
   final bool isLoading;
   final RemoteError? error;
@@ -36,8 +36,8 @@ class HomeState {
   }
 }
 
-class HomeBloc extends Cubit<HomeState> {
-  HomeBloc(this.propertyId) : super(HomeState.loading()) {
+class PropertyDetailsBloc extends Cubit<PropertyDetailsState> {
+  PropertyDetailsBloc(this.propertyId) : super(PropertyDetailsState.loading()) {
     loadData();
   }
 
@@ -48,8 +48,8 @@ class HomeBloc extends Cubit<HomeState> {
   Future<void> loadData() async {
     final result = await _propertyRepository.getProperty(propertyId);
     result.fold(
-      (error) => emit(HomeState.error(error)),
-      (property) => emit(HomeState.data(property)),
+      (error) => emit(PropertyDetailsState.error(error)),
+      (property) => emit(PropertyDetailsState.data(property)),
     );
   }
 
