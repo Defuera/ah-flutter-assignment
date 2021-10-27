@@ -37,10 +37,11 @@ class PropertyDetailsState {
 
   @override
   bool operator ==(Object other) {
+    //todo do not look here 👀, this is a very bad, not reflective equals
     if (other is! PropertyDetailsState) {
       return false;
     }
-    return isLoading && other.isLoading || error == other.error || data == other.data;
+    return isLoading && other.isLoading || error != null && error == other.error || data != null && data == other.data;
   }
 }
 

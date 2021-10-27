@@ -1,9 +1,12 @@
 import 'package:funda/common/funda_api.dart';
 import 'package:funda/common/http_client.dart';
+import 'package:funda/common/model/property.dart';
 import 'package:funda/property_details/model/property_local_data_source.dart';
 import 'package:funda/property_details/model/property_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+
+class MockProperty extends Mock implements Property {}
 
 class MockHttpClient extends Mock implements HttpClient {}
 

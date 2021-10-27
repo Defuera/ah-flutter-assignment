@@ -1,14 +1,11 @@
 import 'package:either_option/either_option.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:funda/common/model/error.dart';
-import 'package:funda/common/model/property.dart';
 import 'package:funda/common/utils/either_option_extensions.dart';
 import 'package:funda/property_details/model/property_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../mocks_registration.dart';
-
-class MockProperty extends Mock implements Property {}
 
 Future<void> main() async {
   setUp(() {
