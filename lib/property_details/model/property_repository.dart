@@ -14,9 +14,8 @@ class PropertyRepository {
   Future<Either<RemoteError, Property>> getProperty(String propertyId) async {
     final data = await local.getProperty(propertyId);
     if (data == null) {
-      final result = await remote.getProperty(propertyId);
-      result.doOnRight((data) => local.setProperty(propertyId, data));
-      return result;
+      return await remote.getProperty(propertyId)
+        ..doOnRight((data) => local.setProperty(propertyId, data));
     } else {
       return Right(data);
     }

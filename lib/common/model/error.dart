@@ -21,7 +21,9 @@ class RemoteError {
   final int? code;
   final String? message;
   final RemoteErrorType type;
+}
 
+extension RemoteErrorExtention on RemoteError {
   T when<T>({
     required T Function() network,
     required T Function(String?) unexpected,

@@ -4,7 +4,7 @@ import 'package:funda/property_details/model/property_local_data_source.dart';
 import 'package:funda/property_details/model/property_repository.dart';
 import 'package:get_it/get_it.dart';
 
-//let's assume I'm inserting it via build parameters and actually store key itself on CI
+//API key is hardcoded, should be injected, preferably on CI, and then be whitebox encrypted)
 const _apiKey = 'ac1b0b1572524640a0ecc54de453ea9f';
 
 class DiModule {
@@ -13,9 +13,9 @@ class DiModule {
 
     getIt
       ..registerSingleton(HttpClient(apiKey: _apiKey))
-      ..registerSingleton(FundaApi(GetIt.instance.get()))
+      ..registerSingleton(FundaApi(getIt.get()))
       ..registerSingleton(PropertyLocalDataSource())
-      ..registerSingleton(PropertyRepository(GetIt.instance.get(), GetIt.instance.get()));
+      ..registerSingleton(PropertyRepository(getIt.get(), getIt.get()));
 
     await getIt.allReady();
   }
