@@ -32,56 +32,60 @@ class _DetailedPropertyWidget extends StatelessWidget {
   final Property property;
 
   @override
-  Widget build(BuildContext context) => ListView(
-        children: [
-          Image.network(property.mainPhotoUrl ?? ''),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (property.address != null)
+  Widget build(BuildContext context) => SafeArea(
+    top: false,
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+            Image.network(property.mainPhotoUrl ?? ''),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (property.address != null)
+                    Text(
+                      property.address!,
+                      style: Theme.of(context).textTheme.headline5.boldAndBlack,
+                    ),
+                  const SizedBox(height: 8),
                   Text(
-                    property.address!,
+                    '${property.postcode ?? ''} ${property.place ?? ''}',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _IconedText(icon: Icons.crop_square, title: '${property.livingArea} m²'),
+                      _IconedText(icon: Icons.zoom_out_map, title: '${property.groundArea} m²'),
+                      _IconedText(icon: Icons.bed, title: '${property.totalBedrooms}'),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    formatPrice(property.price),
                     style: Theme.of(context).textTheme.headline5.boldAndBlack,
                   ),
-                const SizedBox(height: 8),
-                Text(
-                  '${property.postcode ?? ''} ${property.place ?? ''}',
-                  style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.grey),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _IconedText(icon: Icons.crop_square, title: '${property.livingArea} m²'),
-                    _IconedText(icon: Icons.zoom_out_map, title: '${property.groundArea} m²'),
-                    _IconedText(icon: Icons.bed, title: '${property.totalBedrooms}'),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  formatPrice(property.price),
-                  style: Theme.of(context).textTheme.headline5.boldAndBlack,
-                ),
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
-                Text(
-                  'Description',
-                  style: Theme.of(context).textTheme.headline5.boldAndBlack,
-                ),
-                const SizedBox(height: 16),
-                if (property.completeDescription != null)
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 16),
                   Text(
-                    property.completeDescription!,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    'Description',
+                    style: Theme.of(context).textTheme.headline5.boldAndBlack,
                   ),
-              ],
+                  const SizedBox(height: 16),
+                  if (property.completeDescription != null)
+                    Text(
+                      property.completeDescription!,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
-      );
+          ],
+        ),
+  );
 }
 
 class _ErrorWidget extends StatelessWidget {
