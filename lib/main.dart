@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:ah/collection/collection_screen.dart';
+import 'package:ah/common/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:funda/common/di.dart';
-import 'package:funda/property_details/property_details_screen.dart';
 import 'package:logging/logging.dart';
 
 const expiredId = '6289a7bb-a1a8-40d5-bed1-bff3a5f62ee6';
@@ -28,7 +28,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.orange),
-        home: const PropertyDetailsScreen(propertyId: validId),
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+            primary: Color(0xff607D8B),
+            primaryVariant: Color(0xff607D8B),
+            secondary: Color(0xff9E9E9E),
+            secondaryVariant: Color(0xff757575),
+            surface: Colors.white,
+            background: Colors.white,
+          ),
+        ),
+        home: const CollectionScreen(),
       );
 }
+

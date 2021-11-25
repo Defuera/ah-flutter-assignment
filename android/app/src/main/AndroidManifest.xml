@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.funda.funda">
+    package="nl.ah.assignment">
    <application
-        android:label="funda"
+        android:label="ah"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

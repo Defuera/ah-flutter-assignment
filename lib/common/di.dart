@@ -1,21 +1,21 @@
-import 'package:funda/common/funda_api.dart';
-import 'package:funda/common/http_client.dart';
-import 'package:funda/property_details/model/property_local_data_source.dart';
-import 'package:funda/property_details/model/property_repository.dart';
+import 'package:ah/common/ah_api.dart';
+import 'package:ah/common/http_client.dart';
+import 'package:ah/common/model/art_objects_repository.dart';
 import 'package:get_it/get_it.dart';
 
 //API key is hardcoded, should be injected, preferably on CI, and then be whitebox encrypted)
-const _apiKey = 'ac1b0b1572524640a0ecc54de453ea9f';
+const _apiKey = '0fiuZFh4';
+const _baseUrl = 'https://www.rijksmuseum.nl/api/en';
 
 class DiModule {
   static Future<void> setup() async {
     final getIt = GetIt.instance;
 
     getIt
-      ..registerSingleton(HttpClient(apiKey: _apiKey))
-      ..registerSingleton(FundaApi(getIt.get()))
-      ..registerSingleton(PropertyLocalDataSource())
-      ..registerSingleton(PropertyRepository(getIt.get(), getIt.get()));
+      ..registerSingleton(HttpClient(baseUrl: _baseUrl, apiKey: _apiKey))
+      ..registerSingleton(AhApi(getIt.get()))
+      ..registerSingleton(ArtObjectRepository(getIt.get()));
+    // ..registerSingleton(PropertyRepository(getIt.get(), getIt.get()));
 
     await getIt.allReady();
   }

@@ -1,4 +1,4 @@
-package nl.funda.funda
+package nl.ah.assignment
 
 import io.flutter.embedding.android.FlutterActivity
 
