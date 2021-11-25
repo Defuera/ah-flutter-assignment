@@ -1,6 +1,7 @@
-import 'package:ah/common/ah_api.dart';
-import 'package:ah/common/http_client.dart';
-import 'package:ah/common/model/art_objects_repository.dart';
+import 'package:ah/common/model/collection_cache.dart';
+import 'package:ah/common/model/collection_repository.dart';
+import 'package:ah/common/model/network/api.dart';
+import 'package:ah/common/model/network/http_client.dart';
 import 'package:get_it/get_it.dart';
 
 //API key is hardcoded, should be injected, preferably on CI, and then be whitebox encrypted)
@@ -13,9 +14,9 @@ class DiModule {
 
     getIt
       ..registerSingleton(HttpClient(baseUrl: _baseUrl, apiKey: _apiKey))
-      ..registerSingleton(AhApi(getIt.get()))
-      ..registerSingleton(ArtObjectRepository(getIt.get()));
-    // ..registerSingleton(PropertyRepository(getIt.get(), getIt.get()));
+      ..registerSingleton(RijksDataApi(getIt.get()))
+      ..registerSingleton(CollectionCache())
+      ..registerSingleton(CollectionRepository(getIt.get(), getIt.get()));
 
     await getIt.allReady();
   }

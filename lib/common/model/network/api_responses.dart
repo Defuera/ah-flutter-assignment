@@ -1,4 +1,4 @@
-import 'package:ah/common/model/models.dart';
+import 'package:ah/common/model/data/models.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'api_responses.g.dart';

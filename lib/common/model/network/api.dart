@@ -1,15 +1,15 @@
-import 'package:ah/common/http_client.dart';
-import 'package:ah/common/model/api_responses.dart';
-import 'package:ah/common/model/error.dart';
-import 'package:ah/common/model/models.dart';
+import 'package:ah/common/model/data/error.dart';
+import 'package:ah/common/model/data/models.dart';
+import 'package:ah/common/model/network/api_responses.dart';
+import 'package:ah/common/model/network/http_client.dart';
 import 'package:dio/dio.dart';
 import 'package:either_option/either_option.dart';
 
-const _collectionEndpoint = '/collection'; //?key=[key]&involvedMaker=Rembrandt+van+Rijn
-// const _propertyEndpoint = '/feeds/Aanbod.svc/json/detail/[key]/koop/[id]/';
+const _collectionEndpoint = '/collection';
+const _artObjectEndpoint = '/collection/[object-number]';
 
-class AhApi {
-  AhApi(this.client);
+class RijksDataApi {
+  RijksDataApi(this.client);
 
   final HttpClient client;
 
@@ -21,8 +21,11 @@ class AhApi {
     );
   }
 
-// Future<Either<RemoteError, Collection>> getObjectDetails(String objectNumber) async =>
-//     executeSafely(client.getJson(_collectionEndpoint.replaceAll('[id]', objectNumber)), Collection.fromJson);
+  Future<Either<RemoteError, ArtObject>> getArtObject(String artObjectId) async =>
+      executeSafely<Map<String, dynamic>, ArtObject>(
+        client.getJson(_artObjectEndpoint.replaceAll('[object-number]', artObjectId)),
+        (json) => ArtObject.fromJson(json),
+      );
 }
 
 Future<Either<RemoteError, T>> executeSafely<R, T>(

@@ -1,6 +1,6 @@
-import 'package:ah/common/model/art_objects_repository.dart';
-import 'package:ah/common/model/error.dart';
-import 'package:ah/common/model/models.dart';
+import 'package:ah/common/model/collection_repository.dart';
+import 'package:ah/common/model/data/error.dart';
+import 'package:ah/common/model/data/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -19,7 +19,7 @@ class CollectionState with _$CollectionState {
 class CollectionBloc extends Cubit<CollectionState> {
   CollectionBloc() : super(CollectionState.loading());
 
-  final _repository = GetIt.instance.get<ArtObjectRepository>();
+  final _repository = GetIt.instance.get<CollectionRepository>();
 
   Future<void> init() async {
     final result = await _repository.getCollection();
