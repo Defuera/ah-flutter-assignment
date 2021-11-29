@@ -8,7 +8,7 @@ import 'package:ah/common/model/network/utils.dart';
 import 'package:either_option/either_option.dart';
 
 abstract class CollectionRemoteDataSource {
-  Future<Either<RemoteError, List<ArtObject>>> getCollection();
+  Future<Either<RemoteError, List<ArtObject>>> getCollection(int page);
 
   Future<Either<RemoteError, ArtObjectDetailed>> getArtObject(String artObjectId);
 }
@@ -20,10 +20,11 @@ class RijksDataApi extends CollectionRemoteDataSource {
 
   final _collectionEndpoint = '/collection';
   final _artObjectEndpoint = '/collection/[object-number]';
+  final _perPage = 10;
 
   @override
-  Future<Either<RemoteError, List<ArtObject>>> getCollection() async {
-    final jsonString = client.getJson(_collectionEndpoint);
+  Future<Either<RemoteError, List<ArtObject>>> getCollection(int page) async {
+    final jsonString = client.getJson('$_collectionEndpoint?ps=$_perPage&p=$page');
     return executeSafely<Map<String, dynamic>, List<ArtObject>>(
       jsonString,
       (json) => CollectionResponse.fromJson(json).artObjects,
@@ -40,7 +41,7 @@ class RijksDataApi extends CollectionRemoteDataSource {
 
 class MockApi extends CollectionRemoteDataSource {
   @override
-  Future<Either<RemoteError, List<ArtObject>>> getCollection() async {
+  Future<Either<RemoteError, List<ArtObject>>> getCollection(int page) async {
     throw Exception('Not implemented');
   }
 

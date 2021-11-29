@@ -9,8 +9,9 @@ class HttpClient {
 
   late final _authInterceptor = InterceptorsWrapper(
     onRequest: (options, handler) {
+      final concatSymbol = options.path.contains('?') ? '&' : '?';
       final options2 = options.copyWith(
-        path: '${options.path}?key=$apiKey',
+        path: '${options.path}${concatSymbol}key=$apiKey',
       );
       handler.next(options2);
     },

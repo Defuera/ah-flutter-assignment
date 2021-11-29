@@ -11,8 +11,8 @@ class CollectionRepository {
   CollectionRemoteDataSource remote;
   CollectionCache cache;
 
-  Future<Either<RemoteError, List<ArtObject>>> getCollection() async {
-    final result = await remote.getCollection();
+  Future<Either<RemoteError, List<ArtObject>>> getCollection(int page) async {
+    final result = await remote.getCollection(page);
     result.doOnRight((collection) async => cache.storeArtObjects(collection));
     return result;
   }
