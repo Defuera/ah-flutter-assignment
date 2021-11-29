@@ -9,10 +9,16 @@ First page is loading collection 10 items per page. Second page is art object de
 Given issue with detailed API you can notice that thumb and detailed items are different, I hope u will excuse this imperfection.
 
 
+
+https://user-images.githubusercontent.com/1181883/143874658-0e0b8e96-c585-4d54-a2f9-87ced737ddee.mp4
+
+
+
 #### Notice:
 
 - Usage of either/option along with my own extensions, I find it quite a clear and concise approach for  error propagation:)
 - Usage of mock data source to mock broken detailed api
+- When failed to load next list page error widget is shown with retry button
 
 
 #### Known flows:
