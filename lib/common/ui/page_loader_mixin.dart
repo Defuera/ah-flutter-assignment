@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+/// Use `pageLoaderScrollController` as a controller of your ScrollView.
+/// [PageLoaderMixin.loadNextPage] will be invoked every time page is scrolled to an end
 mixin PageLoaderMixin<T extends StatefulWidget> on State<T> {
   final pageLoaderScrollController = ScrollController();
 

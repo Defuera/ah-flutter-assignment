@@ -7,22 +7,22 @@
 ## About
 
 Application is implemented with BLoC architecture, where Cubit is chosen as a base class for blocs.
+First page is loading collection 10 items per page. Second page is art object detailed and it's displayed in two steps:
+1. Display thumb item, which is loaded as part of list
+2. Load and display detailed item
+Given issue with detailed API you can notice that thumb and detailed items are different, I hope u will excuse this imperfection.
+
 
 
 #### Notice:
 - Usage of either/option along with my own extensions, I find it quite a clear and concise approach for  error propagation:)
-- Unit tests ✓
-- Local data source not practically used, rather implement to present power of repository pattern.
-- I didn't use @freezed in this project, but u can see I am somewhat accustomed to it.
+- Usage of mock data source to mock broken detailed api
 
 #### Known flows:
 - Using one model between Network and Domain layers 😱
-- Using a bit of a random icons for living area and ground area, hope u don't mind 🤷‍♀️
-- I didn't do proper text styling, just added TextStyleExtension for consistence. Didn't want to bother without having a UI kit
-- Was lazy to parse ur data format, so no dates in the app
 - API key is hardcoded, should be injected, preferably on CI 🔑
-- Image placeholder is missing
 - Didn't implement localization
+- Not showing per page loader indicator in the bottom of the page
 
 I don't think solving above tasks would show skill too much, so I omitted it to save time.
 I invested in what is more important imo - architecture, scalability and code clarity.
