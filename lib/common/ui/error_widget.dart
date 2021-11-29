@@ -39,9 +39,9 @@ class _NetworkError extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.signal_wifi_connected_no_internet_4_rounded,
-            color: Colors.orangeAccent,
+            color: Theme.of(context).colorScheme.primaryVariant,
             size: 84,
           ),
           ElevatedButton(
