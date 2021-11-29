@@ -54,7 +54,7 @@ class _CollectionDetails extends StatelessWidget {
                     aspectRatio: 3,
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/images/rijksmuseum_placeholder.png',
-                      image: artObjects[index].headerImage.url,
+                      image: artObjects[index].headerImage?.url ?? artObjects[index].webImage.url,
                       fit: BoxFit.fitHeight,
                     ),
                   ),

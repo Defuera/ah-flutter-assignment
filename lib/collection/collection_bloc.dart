@@ -19,7 +19,7 @@ class CollectionState with _$CollectionState {
 class CollectionBloc extends Cubit<CollectionState> {
   CollectionBloc() : super(CollectionState.loading());
 
-  final _repository = GetIt.instance.get<CollectionRepository>();
+  final _repository = GetIt.instance.get<CollectionRepository>(instanceName: 'api');
 
   Future<void> init() async {
     final result = await _repository.getCollection();

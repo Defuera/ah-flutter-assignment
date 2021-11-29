@@ -13,11 +13,15 @@ class ArtObjectState with _$ArtObjectState {
 
   factory ArtObjectState.loading() = _ArtObjectStateLoading;
 
-  factory ArtObjectState.data({ArtObject? artObject, RemoteError? error}) = _ArtObjectStateData;
+  factory ArtObjectState.data({
+    ArtObject? thumb,
+    ArtObjectDetailed? detailed,
+    RemoteError? error,
+  }) = _ArtObjectStateData;
 
-  ArtObject? get artObject => when(loading: () => null, data: (artObject, error) => artObject);
+  ArtObject? get artObject => when(loading: () => null, data: (thumb, detailed, error) => detailed ?? thumb);
 
-  RemoteError? get error => when(loading: () => null, data: (artObject, error) => error);
+  RemoteError? get error => when(loading: () => null, data: (thumb, detailed, error) => error);
 }
 
 class ArtObjectBloc extends Cubit<ArtObjectState> {
@@ -25,13 +29,19 @@ class ArtObjectBloc extends Cubit<ArtObjectState> {
 
   final String objectId;
 
-  final _repository = GetIt.instance.get<CollectionRepository>();
+  final _repository = GetIt.instance.get<CollectionRepository>(instanceName: 'mock_api');
 
   Future<void> init() async {
     _repository.getArtObject(objectId).listen((result) {
       result.fold(
-        (error) => emit(ArtObjectState.data(artObject: state.artObject, error: error)),
-        (artObject) => emit(ArtObjectState.data(artObject: artObject)),
+        (error) => emit(ArtObjectState.data(thumb: state.artObject, error: error)),
+        (artObject) {
+          if (artObject is ArtObjectDetailed) {
+            emit(ArtObjectState.data(detailed: artObject));
+          } else {
+            emit(ArtObjectState.data(thumb: artObject));
+          }
+        },
       );
     });
   }

@@ -19,8 +19,22 @@ class CollectionResponse {
     this.facets,
   );
 
-
   factory CollectionResponse.fromJson(Map<String, dynamic> json) => _$CollectionResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CollectionResponseToJson(this);
+}
+
+@JsonSerializable()
+class ArtObjectResponse {
+  final int elapsedMilliseconds;
+  final ArtObjectDetailed artObject;
+
+  ArtObjectResponse(
+    this.elapsedMilliseconds,
+    this.artObject,
+  );
+
+  factory ArtObjectResponse.fromJson(Map<String, dynamic> json) => _$ArtObjectResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ArtObjectResponseToJson(this);
 }

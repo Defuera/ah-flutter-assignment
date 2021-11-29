@@ -11,25 +11,31 @@ class ArtObjectScreen extends StatelessWidget {
   final String objectId;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: BlocProvider<ArtObjectBloc>(
-          create: (context) => ArtObjectBloc(objectId)..init(),
-          child: BlocConsumer<ArtObjectBloc, ArtObjectState>(
-            listener: (context, state) {
-              final error = state.error;
-              if (error != null) {
-                error.when(
-                  network: () => _showErrorMessage(context, 'Network error'),
-                  unexpected: (message) => _showErrorMessage(context, message ?? 'Unexpected error'),
-                  server: (message, code) => _showErrorMessage(context, message),
-                );
-              }
-            },
-            builder: (context, state) => state.when(
+  Widget build(BuildContext context) => BlocProvider<ArtObjectBloc>(
+        create: (context) => ArtObjectBloc(objectId)..init(),
+        child: BlocConsumer<ArtObjectBloc, ArtObjectState>(
+          listener: (context, state) {
+            final error = state.error;
+            if (error != null) {
+              error.when(
+                network: () => _showErrorMessage(context, 'Network error'),
+                unexpected: (message) => _showErrorMessage(context, message ?? 'Unexpected error'),
+                server: (message, code) => _showErrorMessage(context, message),
+              );
+            }
+          },
+          builder: (context, state) => Scaffold(
+            appBar: AppBar(
+              title: Text(state.artObject?.title ?? ''),
+            ),
+            extendBodyBehindAppBar: true,
+            body: state.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              data: (artObject, error) {
-                if (artObject != null) {
-                  return _DetailedArtObjectWidget(artObject);
+              data: (thumb, detailed, error) {
+                if (detailed != null) {
+                  return _ArtObjectDetailedWidget(detailed);
+                } else if (thumb != null) {
+                  return _ArtObjectBaseWidget(artObject: thumb);
                 } else if (error != null) {
                   return AhErrorWidget(error);
                 } else {
@@ -48,10 +54,39 @@ class ArtObjectScreen extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
 }
 
-class _DetailedArtObjectWidget extends StatelessWidget {
-  const _DetailedArtObjectWidget(this.artObject);
+class _ArtObjectDetailedWidget extends StatelessWidget {
+  const _ArtObjectDetailedWidget(this.artObject);
+
+  final ArtObjectDetailed artObject;
+
+  @override
+  Widget build(BuildContext context) => _ArtObjectBaseWidget(
+        artObject: artObject,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Materials: ${artObject.materials.reduce((value, element) => '$value, $element')}.',
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              artObject.plaqueDescriptionDutch,
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16, height: 1.32),
+            ),
+          ),
+        ],
+      );
+}
+
+class _ArtObjectBaseWidget extends StatelessWidget {
+  const _ArtObjectBaseWidget({required this.artObject, this.children});
 
   final ArtObject artObject;
+  final List<Widget>? children;
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -59,7 +94,10 @@ class _DetailedArtObjectWidget extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            Image.network(artObject.webImage.url),
+            AspectRatio(
+              aspectRatio: 1,
+              child: Image.network(artObject.webImage.url),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -69,26 +107,18 @@ class _DetailedArtObjectWidget extends StatelessWidget {
                     artObject.longTitle,
                     style: Theme.of(context).textTheme.headline5,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 24),
                   Text(
-                    artObject.longTitle,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    artObject.principalOrFirstMaker,
+                    '${artObject.principalOrFirstMaker}, ${artObject.productionPlacesDisplay}',
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.grey),
                   ),
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 16),
-                  Text(
-                    artObject.productionPlaces.reduce((value, element) => '$value, $element').trim(),
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.grey),
-                  ),
                 ],
               ),
             ),
+            ...children ?? []
           ],
         ),
       );
