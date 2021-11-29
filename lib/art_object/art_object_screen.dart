@@ -96,7 +96,11 @@ class _ArtObjectBaseWidget extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1,
-              child: Image.network(artObject.webImage.url),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'assets/images/rijksmuseum_placeholder.png',
+                image: artObject.webImage.url,
+                fit: BoxFit.fitHeight,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
