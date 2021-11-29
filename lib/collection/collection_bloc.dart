@@ -9,17 +9,17 @@ part 'collection_bloc.freezed.dart';
 
 @freezed
 class CollectionState with _$CollectionState {
-
   CollectionState._();
 
-  int get page => when(loading: () => 0, error: (_) => 0, data: (_, page) => page);
-  List<ArtObject> get data => when(loading: () => [], error: (_) => [], data: (data, _) => data);
+  int get page => when(loading: () => 0, data: (_, __, page) => page);
 
   factory CollectionState.loading() = _CollectionStateLoading;
 
-  factory CollectionState.error(RemoteError error) = _CollectionStateError;
-
-  factory CollectionState.data(List<ArtObject> data, int page) = _CollectionStateData;
+  factory CollectionState.data({
+    List<ArtObject>? data,
+    RemoteError? error,
+    @Default(1) int page,
+  }) = _CollectionStateData;
 }
 
 class CollectionBloc extends Cubit<CollectionState> {
@@ -27,23 +27,25 @@ class CollectionBloc extends Cubit<CollectionState> {
 
   final _repository = GetIt.instance.get<CollectionRepository>(instanceName: 'api');
 
-  Future<void> init() async {
-    final loadingPage = state.page;
-    final result = await _repository.getCollection(loadingPage);
-    result.fold(
-      (error) => emit(CollectionState.error(error)),
-      (artObjects) => emit(CollectionState.data(artObjects, loadingPage)),
-    );
-  }
+  List<ArtObject> get _data => state.when(loading: () => [], data: (data, _, __) => data ?? []);
+
+  Future<void> init() => _loadPage(state.page);
 
   Future<void> retry() => init();
 
-  Future<void>  loadNextPage() async {
-    final loadingPage = state.page + 1;
-    final result = await _repository.getCollection(loadingPage);
+  Future<void> loadNextPage() async => _loadPage(state.page + 1);
+
+  Future<void> _loadPage(int page) async {
+    final result = await _repository.getCollection(page);
     result.fold(
-          (error) => emit(CollectionState.error(error)),
-          (artObjects) => emit(CollectionState.data(state.data + artObjects, loadingPage)),
+      (error) {
+        final stateWithError = state.when(
+          loading: () => CollectionState.data(error: error, page: page - 1),
+          data: (data, _, page) => CollectionState.data(data: data, error: error, page: page - 1),
+        );
+        emit(stateWithError);
+      },
+      (artObjects) => emit(CollectionState.data(data: _data + artObjects, page: page)),
     );
   }
 }

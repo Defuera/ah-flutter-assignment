@@ -1,6 +1,7 @@
 import 'package:ah/art_object/art_object_bloc.dart';
 import 'package:ah/common/model/data/error.dart';
 import 'package:ah/common/model/data/models.dart';
+import 'package:ah/common/ui/art_object_image.dart';
 import 'package:ah/common/ui/error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -94,13 +95,10 @@ class _ArtObjectBaseWidget extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            AspectRatio(
+            ArtObjectImage(
+              imageUrl: artObject.webImage.url,
+              placeholderAsset: 'assets/images/rijksmuseum_placeholder.png',
               aspectRatio: 1,
-              child: FadeInImage.assetNetwork(
-                placeholder: 'assets/images/rijksmuseum_placeholder.png',
-                image: artObject.webImage.url,
-                fit: BoxFit.fitHeight,
-              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
